@@ -6,10 +6,13 @@ using namespace std;
 
 class NodeT{
     public:
+        //Constructor
         NodeT(int data);
+        //Setters
         void setData(int data);
         void setLeft(NodeT *left);
         void setRight(NodeT *right);
+        //Getters
         int getData();
         NodeT* getLeft();
         NodeT* getRight();
