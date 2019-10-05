@@ -1,5 +1,6 @@
 #include <iostream>
 #include "stack"
+#include "queue"
 #include "NodeT.h"
 
 using namespace std;
@@ -18,6 +19,9 @@ public:
     void print(int x);
     void printLeaves();
     int count();
+    int height();
+    vector<int> ancestors(int data);
+    int whatLevelamI(int data);
 
 private:
     NodeT *root;
@@ -28,6 +32,7 @@ private:
     void inOrder(NodeT *r);
     void postOrder(NodeT *r);
     void libera(NodeT *r);
+
 };
 
 BST::BST()
@@ -251,6 +256,23 @@ void BST::print(int x)
     case 3:
         postOrder(root);
         break;
+    case 5:
+        if (root == NULL) return;
+        queue<NodeT*> q;
+        q.push(root);
+        while (!q.empty()){
+            NodeT* temp = q.front();
+            cout<<temp->getData()<<" ";
+            q.pop();
+
+            if(temp->getLeft()!=NULL){
+                q.push(temp->getLeft());
+            }
+            if(temp->getRight()!=NULL){
+                q.push(temp->getRight());
+            }
+        }
+        break;
     }
     cout << endl;
 }
@@ -285,24 +307,103 @@ void BST::printLeaves()
     cout << endl;
 }
 
-int BST::count(){
-    if (root == NULL) return 0;
+int BST::count()
+{
+    if (root == NULL)
+        return 0;
 
     int iCount = 0;
     stack<NodeT *> s;
     NodeT *temp = root;
 
-    while (temp!=NULL || s.empty()==false){
-        while (temp!=NULL){
+    while (temp != NULL || s.empty() == false)
+    {
+        while (temp != NULL)
+        {
             s.push(temp);
             temp = temp->getLeft();
         }
-        temp=s.top();
+        temp = s.top();
         s.pop();
         iCount++;
-        temp=temp->getRight();
+        temp = temp->getRight();
     }
     return iCount;
 }
+
+int BST::height()
+{
+    if (root == NULL)
+        return 0;
+
+    queue<NodeT *> q;
+    q.push(root);
+    int iCount = 0;
+
+    while (!q.empty())
+    {
+        int size = q.size();
+        while (size>0)
+        {
+            NodeT *temp = q.front();
+            q.pop();
+
+            if (temp->getLeft() != NULL)
+            {
+                q.push(temp->getLeft());
+            }
+
+            if (temp->getRight() != NULL)
+            {
+                q.push(temp->getRight());
+            }
+            size--;
+        }
+        iCount++;
+    }
+    return iCount;
+}
+
+vector<int> BST::ancestors(int data)
+{
+    NodeT *curr = root;
+    stack<int> s;
+    vector<int> ancestors; 
+
+    while (curr != NULL)
+    {
+      
+        if (curr->getData() == data)
+        {
+            break;
+        }
+        s.push(curr -> getData());
+        curr = (curr->getData() > data) ? curr->getLeft() : curr->getRight();
+    }
+
+    while (!s.empty()) {
+        int value = s.top();
+        ancestors.push_back(value);
+        s.pop();
+    } 
+    return ancestors;
+}
+
+int BST::whatLevelamI(int data)
+{
+    NodeT *curr = root;
+    int height = 0;
+    while (curr != NULL)
+    {   
+        height++;
+        if (curr->getData() == data)
+        {
+            return height;
+        }
+        curr = (curr->getData() > data) ? curr->getLeft() : curr->getRight();
+    }
+    return -1;
+}
+
 
 #endif

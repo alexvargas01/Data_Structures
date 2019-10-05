@@ -25,6 +25,14 @@ int main(){
 
     arbol.printLeaves();
     cout<<arbol.count()<<endl;
+    cout<<arbol.height()<<endl;
+    cout<< "Height is: "<<arbol.whatLevelamI(7)<<endl;
+    for (int i : arbol.ancestors(7)) {
+        cout << i << " ";
+    }
+    cout << endl;
+    arbol.print(5);
+
     
 
     return 0;
