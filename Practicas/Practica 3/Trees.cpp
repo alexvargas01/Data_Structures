@@ -20,17 +20,20 @@ int main(){
     arbol.print(1);
     cout<<"inOrder: ";
     arbol.print(2);
-    cout<<"postOrder: ";
+    cout<<"postOrder: "; 
     arbol.print(3);
 
-    arbol.printLeaves();
-    cout<<arbol.count()<<endl;
-    cout<<arbol.height()<<endl;
-    cout<< "Height is: "<<arbol.whatLevelamI(7)<<endl;
+    cout<<"Leaves are: ";
+    arbol.printLeavesCHR();
+    cout<<"# of Nodes: " <<arbol.count()<<endl;
+    cout<<"Height of tree: "<<arbol.height()<<endl;
+    cout<< "Height of Node: "<<arbol.whatLevelamI(7)<<endl;
+    cout<<"Ancestors of Node: ";
     for (int i : arbol.ancestors(7)) {
         cout << i << " ";
     }
     cout << endl;
+    cout<<"Level x Level: ";
     arbol.print(5);
 
     

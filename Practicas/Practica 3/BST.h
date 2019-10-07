@@ -11,6 +11,7 @@ using namespace std;
 class BST
 {
 public:
+    //clase
     BST();
     ~BST();
     bool search(int data);
@@ -18,10 +19,15 @@ public:
     void remove(int data);
     void print(int x);
     void printLeaves();
+    //T escrita
+    void printLeavesCHR();
     int count();
+    //T 07
     int height();
     vector<int> ancestors(int data);
     int whatLevelamI(int data);
+    //T 08
+    int maxWidth();
 
 private:
     NodeT *root;
@@ -32,7 +38,8 @@ private:
     void inOrder(NodeT *r);
     void postOrder(NodeT *r);
     void libera(NodeT *r);
-
+    void printLeaves(NodeT *r);
+    void levelxlevel();
 };
 
 BST::BST()
@@ -243,6 +250,46 @@ void BST::postOrder(NodeT *r)
     }
 }
 
+void BST::printLeaves(NodeT *r)
+{
+    if (r != NULL)
+    {
+        if (r->getLeft() == NULL && r->getRight() == NULL)
+        {
+            cout << r->getData();
+        }
+        else
+        {
+            printLeaves(r->getRight());
+            printLeaves(r->getLeft());
+        }
+    }
+}
+
+//T 07
+void BST::levelxlevel()
+{
+    if (root == NULL)
+        return;
+    queue<NodeT *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        NodeT *temp = q.front();
+        cout << temp->getData() << " ";
+        q.pop();
+
+        if (temp->getLeft() != NULL)
+        {
+            q.push(temp->getLeft());
+        }
+        if (temp->getRight() != NULL)
+        {
+            q.push(temp->getRight());
+        }
+    }
+}
+
 void BST::print(int x)
 {
     switch (x)
@@ -256,28 +303,18 @@ void BST::print(int x)
     case 3:
         postOrder(root);
         break;
+    case 4:
+        printLeaves(root);
+        break;
     case 5:
-        if (root == NULL) return;
-        queue<NodeT*> q;
-        q.push(root);
-        while (!q.empty()){
-            NodeT* temp = q.front();
-            cout<<temp->getData()<<" ";
-            q.pop();
-
-            if(temp->getLeft()!=NULL){
-                q.push(temp->getLeft());
-            }
-            if(temp->getRight()!=NULL){
-                q.push(temp->getRight());
-            }
-        }
+        levelxlevel();
         break;
     }
     cout << endl;
 }
 
-void BST::printLeaves()
+//T Escrita
+void BST::printLeavesCHR()
 {
     // if the tree is empty
     if (root == NULL)
@@ -331,6 +368,7 @@ int BST::count()
     return iCount;
 }
 
+//T 07
 int BST::height()
 {
     if (root == NULL)
@@ -343,7 +381,7 @@ int BST::height()
     while (!q.empty())
     {
         int size = q.size();
-        while (size>0)
+        while (size > 0)
         {
             NodeT *temp = q.front();
             q.pop();
@@ -368,24 +406,25 @@ vector<int> BST::ancestors(int data)
 {
     NodeT *curr = root;
     stack<int> s;
-    vector<int> ancestors; 
+    vector<int> ancestors;
 
     while (curr != NULL)
     {
-      
+
         if (curr->getData() == data)
         {
             break;
         }
-        s.push(curr -> getData());
+        s.push(curr->getData());
         curr = (curr->getData() > data) ? curr->getLeft() : curr->getRight();
     }
 
-    while (!s.empty()) {
+    while (!s.empty())
+    {
         int value = s.top();
         ancestors.push_back(value);
         s.pop();
-    } 
+    }
     return ancestors;
 }
 
@@ -394,7 +433,7 @@ int BST::whatLevelamI(int data)
     NodeT *curr = root;
     int height = 0;
     while (curr != NULL)
-    {   
+    {
         height++;
         if (curr->getData() == data)
         {
@@ -405,5 +444,10 @@ int BST::whatLevelamI(int data)
     return -1;
 }
 
+//T 08
+int BST::maxWidth()
+{
+    return 0;
+}
 
 #endif
