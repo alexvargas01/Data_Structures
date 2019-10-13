@@ -2,6 +2,7 @@
 #include "stack"
 #include "queue"
 #include "NodeT.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -28,6 +29,10 @@ public:
     int whatLevelamI(int data);
     //T 08
     int maxWidth();
+    int nearstRelative(int n1, int n2);
+    BST(const BST &copy);
+    bool operator==(const BST &ABB); 
+    queue<int> toQueue();            
 
 private:
     NodeT *root;
@@ -39,7 +44,13 @@ private:
     void postOrder(NodeT *r);
     void libera(NodeT *r);
     void printLeaves(NodeT *r);
+    //T 07
     void levelxlevel();
+    //T 08 Helpers
+    int maxWidthHelper(NodeT *r);
+    void operatorHelper(NodeT *r1, NodeT *r2, bool &bVal);
+    void addNodes(NodeT *r1, NodeT *r2);
+    void toQueueHelper(NodeT *r, queue<int> &q);
 };
 
 BST::BST()
@@ -256,12 +267,12 @@ void BST::printLeaves(NodeT *r)
     {
         if (r->getLeft() == NULL && r->getRight() == NULL)
         {
-            cout << r->getData();
+            cout << r->getData() << " ";
         }
         else
         {
-            printLeaves(r->getRight());
             printLeaves(r->getLeft());
+            printLeaves(r->getRight());
         }
     }
 }
@@ -271,6 +282,7 @@ void BST::levelxlevel()
 {
     if (root == NULL)
         return;
+
     queue<NodeT *> q;
     q.push(root);
     while (!q.empty())
@@ -445,9 +457,192 @@ int BST::whatLevelamI(int data)
 }
 
 //T 08
+//Max Width of a level
 int BST::maxWidth()
 {
-    return 0;
+    return maxWidthHelper(root);
+}
+
+int BST::maxWidthHelper(NodeT *r)
+{
+    if (root == NULL)
+        return 0;
+
+    int iR = 0;
+
+    queue<NodeT *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int iCount = q.size();
+
+        if (iR < iCount)
+        {
+            iR = iCount;
+        }
+
+        while (iCount--)
+        {
+            NodeT *curr = q.front();
+            q.pop();
+            if (curr->getLeft() != NULL)
+            {
+                q.push(curr->getLeft());
+            }
+            if (curr->getRight() != NULL)
+            {
+                q.push(curr->getRight());
+            }
+        }
+    }
+    return iR;
+}
+
+//Nearest relative between two nodes
+int BST::nearstRelative(int n1, int n2)
+{
+    NodeT *curr = root;
+    int iMax, iMin;
+
+    if (n1 > n2)
+    {
+        iMax = n1;
+        iMin = n2;
+    }
+    else
+    {
+        iMax = n2;
+        iMin = n1;
+    }
+
+    if (iMax == iMin)
+    {
+        return iMax;
+    }
+
+    if (iMin < curr->getData() && iMax > curr->getData())
+    {
+        return curr->getData();
+    }
+
+    while (iMax < curr->getData() && iMin < curr->getData())
+    {
+        curr = curr->getLeft();
+    }
+
+    while (iMax > curr->getData() && iMin > curr->getData())
+    {
+        curr = curr->getRight();
+    }
+
+    return curr->getData();
+}
+
+//Copy constructor
+BST::BST(const BST &copy)
+{
+    NodeT *curr2 = copy.root;
+
+    if (curr2 == NULL)
+    {
+        root = NULL;
+    }
+    else
+    {
+        root = new NodeT(curr2->getData());
+        NodeT *curr1 = root;
+        addNodes(curr1, curr2);
+    }
+}
+
+void BST::addNodes(NodeT *r1, NodeT *r2)
+{
+    if (r2 == NULL)
+    {
+        return;
+    }
+
+    if (r2->getLeft() != NULL && r2->getRight() != NULL)
+    {
+        r1->setLeft(new NodeT(r2->getLeft()->getData()));
+        r1->setRight(new NodeT(r2->getRight()->getData()));
+
+        addNodes(r1->getLeft(), r2->getLeft());
+        addNodes(r1->getRight(), r2->getRight());
+    }
+
+    else if (r2->getLeft() != NULL && r2->getRight() == NULL)
+    {
+        r1->setLeft(new NodeT(r2->getLeft()->getData()));
+        addNodes(r1->getLeft(), r2->getLeft());
+    }
+
+    else if (r2->getLeft() == NULL && r2->getRight() != NULL)
+    {
+        r1->setRight(new NodeT(r2->getRight()->getData()));
+        addNodes(r1->getRight(), r2->getRight());
+    }
+}
+
+//Operator ==
+bool BST::operator==(const BST &ABB)
+{
+    NodeT *curr1 = root;
+    NodeT *curr2 = ABB.root;
+    bool bVal = true;
+
+    if (curr1 == NULL && curr2 == NULL)
+    {
+        return true;
+    }
+    else
+    {
+        operatorHelper(curr1, curr2, bVal);
+        return bVal;
+    }
+}
+
+void BST::operatorHelper(NodeT *r1, NodeT *r2, bool &bVal)
+{
+    if (bVal == false)
+    {
+        return;
+    }
+    else if (r1 == NULL && r2 == NULL)
+    {
+        return;
+    }
+    else if ((r1 != NULL && r2 == NULL) || (r1 == NULL && r2 == NULL))
+    {
+        bVal = false;
+        return;
+    }
+    else if (r1->getData() != r2->getData())
+    {
+        bVal = false;
+        return;
+    }
+    operatorHelper(r1->getLeft(), r2->getLeft(), bVal);
+    operatorHelper(r1->getRight(), r2->getRight(), bVal);
+}
+
+//Returns a queue with nodes ordered from high to low
+queue<int> BST::toQueue()
+{
+    queue<int> iQ;
+    NodeT *curr = root;
+    toQueueHelper(curr, iQ);
+    return iQ;
+}
+
+void BST::toQueueHelper(NodeT *r, queue<int> &q)
+{
+    if (r != NULL)
+    {
+        toQueueHelper(r->getRight(), q);
+        q.push(r->getData());
+        toQueueHelper(r->getLeft(), q);
+    }
 }
 
 #endif

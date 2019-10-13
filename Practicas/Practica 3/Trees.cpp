@@ -1,5 +1,7 @@
 #include <iostream>
 #include "BST.h"
+#include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -16,6 +18,23 @@ int main(){
     arbol.add(29);
     arbol.add(40);
 
+    BST arbol2;
+
+    
+    arbol2.add(18);
+    arbol2.add(11);
+    arbol2.add(21);
+    arbol2.add(4);
+    arbol2.add(13);
+    arbol2.add(19);
+    arbol2.add(26);
+    arbol2.add(2);
+    arbol2.add(10);
+    arbol2.add(17);
+    arbol2.add(24);
+    arbol2.add(14);    
+
+    
     cout<<"preOrder: ";
     arbol.print(1);
     cout<<"inOrder: ";
@@ -36,7 +55,31 @@ int main(){
     cout<<"Level x Level: ";
     arbol.print(5);
 
+    cout<<"Max Width: ";
+    cout<<arbol.maxWidth()<<endl;
     
+
+   cout<<endl;
+   if (arbol == arbol2){
+       cout<<"EI"<<endl;
+   }else {
+       cout<<"Nel prro"<<endl;
+   }
+    cout<<"Nearest is: ";
+    cout<<arbol2.nearstRelative(24,26)<<endl;
+
+    queue<int> result;
+    result = arbol.toQueue();
+
+    cout<<"Queue is: ";
+    while (!result.empty()){
+        cout<<result.front()<<" ";
+        result.pop();
+    }
+    cout<<"\n";
+  
+
+
 
     return 0;
 }
