@@ -123,7 +123,7 @@ int BST::howManyChildren(NodeT *r)
     {
         cont++;
     }
-    return cont++;
+    return cont;
 }
 
 int BST::pred(NodeT *r)
