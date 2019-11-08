@@ -23,6 +23,7 @@ class Priority{
 
 };
 
+//Constructors
 Priority::Priority(){
     data.push_back(0);
     bPriority=true;
@@ -35,11 +36,28 @@ Priority::Priority(bool Priority2){
     iSize=1;
 }
 
-bool Priority::push (int num){
-    data.push_back(num);
-    
-
+int Priority::top(){
+    if (data.size()>1){
+        return data[1];
+    }else{
+        return 0;
+    }
 }
+
+int Priority::size(){
+    return iSize-1;
+}
+
+bool Priority::empty(){
+    if (iSize == 1){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+
 
 
 
