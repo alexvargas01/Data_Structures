@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+
 using namespace std;
 
 #ifndef Priority_h
@@ -41,6 +42,7 @@ Priority::Priority(bool Priority2)
     iSize = 1;
 }
 
+//Methods
 void Priority::push(int num)
 {
     data.push_back(num);
