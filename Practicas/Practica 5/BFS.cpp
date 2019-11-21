@@ -37,6 +37,28 @@ void printMat(bool matAdj[N][N], int v)
     }
 }
 
+void BFS(bool madAdj[N][N], int v){
+    queue<int> fila;
+    vector<bool> status(v, false);
+    int data;
+
+    fila.push(0);
+    status[0] = true;
+
+    while (!fila.empty()){
+        data = fila.front();
+        fila.pop();
+        cout<< (data+1)<<" ";
+        for (int i=0;i<v;i++){
+            if (!status[i] && madAdj[data][i]){
+                status[i] = true;
+                fila.push(i);
+            }
+        }
+    }
+    cout<<endl;
+}
+
 int main()
 {
     bool matAdj[N][N];
@@ -48,5 +70,6 @@ int main()
     leeMatAdj(matAdj, e);
     printMat(matAdj, v);
 
+    BFS(matAdj, v);
     return 0;
 }
